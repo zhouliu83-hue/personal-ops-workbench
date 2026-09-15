@@ -356,8 +356,8 @@ var MODULES = [
    fields:[{n:'记录内容',t:'text',f:1,l:1,long:1},{n:'分类',t:'select',f:1,l:1,opts:['灵感','观点','素材','选题','待办','客户需求','案例']},{n:'归档状态',t:'select',f:1,l:1,opts:['未处理','已归档']},{n:'记录日期',t:'date',f:1,l:1}],
    statusField:'归档状态',statusOpts:['未处理','已归档'],doneVal:'已归档',dateField:'记录日期',sortFn:'byDateDesc'},
   {id:'topics',title:'选题看板',tagline:'一条内容从灵感到发布，卡在哪一眼看到。',dbId:DB.topics,icon:'topics',primary:'选题标题',placeholder:'想到什么选题？',
-   fields:[{n:'选题标题',t:'text',f:1,l:1},{n:'发布平台',t:'multi_select',f:1,l:1,opts:['抖音','视频号','小红书','快手']},{n:'所属账号',t:'text',f:1,l:1,ph:'哪个账号'},{n:'进度状态',t:'select',f:1,l:1,opts:['灵感','脚本中','拍摄中','剪辑中','已发布']},{n:'预计发布日期',t:'date',f:1,l:1},{n:'备注',t:'text',f:1,l:0}],
-   statusField:'进度状态',statusOpts:['灵感','脚本中','拍摄中','剪辑中','已发布'],doneVal:'已发布',dateField:'预计发布日期',sortFn:'byDate'},
+   fields:[{n:'选题标题',t:'text',f:1,l:1},{n:'发布平台',t:'multi_select',f:1,l:1,opts:['抖音','视频号','小红书','快手']},{n:'所属账号',t:'text',f:1,l:1,ph:'哪个账号'},{n:'进度状态',t:'select',f:1,l:1,opts:['灵感','脚本中','拍摄中','剪辑中','已发布']},{n:'预计发布日期',t:'date',f:1,l:1},{n:'文案',t:'text',f:1,l:0,long:1,ph:'口播稿、分镜、字幕、BGM…点开选题直接写或粘贴'},{n:'备注',t:'text',f:1,l:0}],
+   statusField:'进度状态',statusOpts:['灵感','脚本中','拍摄中','剪辑中','已发布'],doneVal:'已发布',dateField:'预计发布日期',sortFn:'byDate',detail:'topic'},
   {id:'materials',title:'素材库',tagline:'把每天产生的想法，沉淀成长期内容资产。',dbId:DB.materials,icon:'materials',primary:'素材标题',placeholder:'素材标题',
    fields:[{n:'素材标题',t:'text',f:1,l:1},{n:'素材内容',t:'text',f:1,l:1,long:1},{n:'素材类型',t:'select',f:1,l:1,opts:['观点','故事','案例','社会现象','客户原话','评论区金句','金句/句子','影视素材','书籍素材','商业案例','个人经历','临时灵感','其他']},{n:'来源',t:'text',f:1,l:1,ph:'哪来的'},{n:'标签',t:'text',f:1,l:1,ph:'逗号分隔，如：转化,到店'},{n:'关联账号',t:'text',f:1,l:0},{n:'关联选题',t:'text',f:1,l:0},{n:'使用状态',t:'select',f:1,l:1,opts:['未使用','使用中','已使用']},{n:'备注',t:'text',f:1,l:0}],
    statusField:'使用状态',statusOpts:['未使用','使用中','已使用'],doneVal:'已使用',filterField:'素材类型',searchAll:1},
@@ -406,7 +406,7 @@ if(!db){
       {_id:'S10',素材标题:'【示例】人只能赚到认知以内的钱',素材内容:'金句：人永远赚不到认知以外的钱，凭运气赚的会凭实力亏掉。',素材类型:'金句/句子',来源:'读书',标签:'认知',关联账号:'',关联选题:'',使用状态:'已使用',备注:''}
     ],
     topics:[
-      {_id:'S11',选题标题:'【示例】实体店老板为什么请人拍短视频还是没单',发布平台:['抖音','视频号'],所属账号:'周正商业IP',进度状态:'脚本中',预计发布日期:'2026-09-15',备注:''},
+      {_id:'S11',选题标题:'【示例】实体店老板为什么请人拍短视频还是没单',发布平台:['抖音','视频号'],所属账号:'周正商业IP',进度状态:'脚本中',预计发布日期:'2026-09-15',文案:'【示例文案·点开任意选题即可编辑】\n开头（3秒）：你花8000块请人拍短视频，为什么还是没单？\n冲突：不是视频的问题，是你根本没设计从视频到店里的路。\n展开：三种老板的下场——只拍不发/发了不接/接了不留。\n结尾钩子：评论区扣"到店"，送你一张《到店转化路径自检表》。',备注:''},
       {_id:'S12',选题标题:'【示例】探店视频开头3秒怎么留住人',发布平台:['抖音'],所属账号:'餐饮老王·探店号',进度状态:'拍摄中',预计发布日期:'2026-09-13',备注:'已过期未发，优先处理'},
       {_id:'S13',选题标题:'【示例】小成本起号：手机拍够100条再说',发布平台:['抖音'],所属账号:'周正商业IP',进度状态:'灵感',预计发布日期:'2026-09-20',备注:''},
       {_id:'S14',选题标题:'【示例】客户见证：从0到1万粉的90天',发布平台:['视频号'],所属账号:'周正商业IP',进度状态:'剪辑中',预计发布日期:'2026-09-17',备注:''}
@@ -1418,6 +1418,43 @@ function showReviewDetail(id){
     +'<button class="btn btn-pri" data-act="edit" data-m="reviews" data-id="'+esc(rv._id)+'">编辑复盘</button></div>';
   openModal(h);
 }
+/* ================= 详情：选题文案板 ================= */
+function showTopicDetail(id){
+  var t=findRow(getModule('topics'),id);
+  if(!t)return;
+  var st=gv(t,'进度状态')||'灵感';
+  var h='<div class="d-hero"><div><div class="dt">'+esc(stripEx(gv(t,'选题标题')))+'</div>'
+    +'<div class="ds">'+esc(gv(t,'发布平台')&&Array.isArray(gv(t,'发布平台'))?gv(t,'发布平台').join(' / '):esc(gv(t,'发布平台')||''))
+    +(gv(t,'所属账号')?' · '+esc(stripEx(gv(t,'所属账号'))):'')
+    +' · <b style="color:var(--pri)">'+esc(st)+'</b>'
+    +(gv(t,'预计发布日期')?' · 计划 '+fmtD(gv(t,'预计发布日期')):'')+'</div></div></div>';
+  /* 文案板：大文本域，直接写或粘贴，Ctrl+Enter / 按钮保存 */
+  h+='<div class="sec-title">📝 文案板 <span class="hint" style="font-weight:400;margin-left:6px">口播稿、分镜、字幕、BGM…直接写或粘贴，Ctrl+Enter 保存</span></div>'
+    +'<textarea id="topic-copy" placeholder="在这里写文案——口播稿、分镜脚本、字幕、拍摄备注，直接粘贴也可以…" style="min-height:260px;font-size:14.5px;line-height:1.8;font-family:inherit">'+esc(gv(t,'文案')||'')+'</textarea>'
+    +'<div style="display:flex;align-items:center;margin-top:8px;gap:10px">'
+    +'<span class="hint" id="topic-copy-count"></span>'
+    +'<button class="btn btn-pri btn-sm" data-act="save-topic-copy" data-id="'+esc(t._id)+'" style="margin-left:auto">保存文案</button></div>';
+  var bk=stripEx(gv(t,'备注'));
+  if(bk)h+='<div class="kv" style="margin-top:12px"><div class="k">备注</div><div class="v">'+esc(bk)+'</div></div>';
+  h+='<div class="form-foot"><button class="btn" data-act="close-modal">关闭</button>'
+    +'<button class="btn btn-pri" data-act="edit" data-m="topics" data-id="'+esc(t._id)+'">编辑选题信息</button></div>';
+  openModal(h);
+  var ta=document.getElementById('topic-copy');
+  var cnt=document.getElementById('topic-copy-count');
+  function updCnt(){cnt.textContent=ta.value.length+' 字';}
+  updCnt();
+  ta.addEventListener('input',updCnt);
+  ta.addEventListener('keydown',function(e){
+    if((e.ctrlKey||e.metaKey)&&e.key==='Enter'){e.preventDefault();saveTopicCopy(t._id);}
+  });
+}
+function saveTopicCopy(id){
+  var ta=document.getElementById('topic-copy');
+  if(!ta)return;
+  db.updateRecord({databaseId:DATABASE_ID&&DB.topics,recordId:id,properties:{'文案':{text:ta.value}}})
+    .then(function(){toast('文案已保存');return reloadModule(getModule('topics'));})
+    .catch(function(err){console.error('[database] 文案保存失败:',err);toast('保存失败，请重试');});
+}
 /* ================= 表单弹窗（新增 / 编辑，支持跨模块预填） ================= */
 function findRow(m,id){
   var rowsArr=state.data[m.id]||[];
@@ -1640,6 +1677,8 @@ document.addEventListener('click',function(e){
   else if(act==='edit'){var mm=M();openForm(mm,findRow(mm,id));}
   else if(act==='del'){var m2=M();deleteRecord(m2,id);}
   else if(act==='proj-open'){showProjectDetail(id);}
+  else if(act==='topic-open'){showTopicDetail(id);}
+  else if(act==='save-topic-copy'){saveTopicCopy(id);}
   else if(act==='acct-open'){showAccountDetail(id);}
   else if(act==='cust-open'){showCustomerDetail(id);}
   else if(act==='review-open'){showReviewDetail(id);}
